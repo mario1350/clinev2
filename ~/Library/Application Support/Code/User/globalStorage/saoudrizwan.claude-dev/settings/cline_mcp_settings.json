@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "github.com/browserbase/mcp-server-browserbase/tree/main/stagehand": {
+      "command": "node",
+      "args": ["/Users/mariomancera/Documents/Cline/MCP/mcp-server-browserbase/stagehand/dist/index.js"],
+      "env": {
+        "BROWSERBASE_API_KEY": "bb_live_dlEzIGp2GAG2fp-Cy_nXZ3H5_XY",
+        "BROWSERBASE_PROJECT_ID": "b770fb56-e830-457f-a49b-579802d48ebb",
+        "OPENAI_API_KEY": "REMOVEDproj-freHUl1NOUGkIb3nlb-fh153iRhWwG2L0O1Xv_-wtYrspXlFU1kc9zvdQ9RXW1ULGfajs3pX5GT3BlbkFJG1OYRuxTjd6snqwMiKedf3I2pKPDyzBcZNBKetfcLYmWdh9VAZOVIOaaIL6_OmpvoYoctZUC8A"
+      }
+    }
+  }
+}
