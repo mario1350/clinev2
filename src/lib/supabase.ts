@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Lead } from '../types/dashboard';
 
-const supabaseUrl = 'https://dmpghtnhvcruyjtznoud.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRtcGdodG5odmNydXlqdHpub3VkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIyMTgyODgsImV4cCI6MjA0Nzc5NDI4OH0.jMCEQqpBgrj1ElIn1sQju6e5wMNYQswzD_yzmmIyHow';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
 

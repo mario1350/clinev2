@@ -10,6 +10,24 @@ import {
   DEFAULT_CALCULATION,
 } from "./proposalConstants";
 
+/**
+ * Type for financing data used in proposal generation.
+ */
+export interface FinancingData {
+  loanTerm: number;
+  creditScoreRange: string;
+  principal: number;
+  incentiveType?: "principal" | "other" | "cashback" | undefined;
+  reducedMonthly?: number;
+  monthly?: number;
+  apr?: number;
+  reducedPrincipal?: number;
+  totalInterest?: number;
+  reducedTotalInterest?: number;
+  total?: number;
+  reducedTotal?: number;
+}
+
 // Define icons (simple unicode symbols as placeholders)
 const icons = {
   solar: "☀️",
@@ -215,7 +233,16 @@ const ensureNumber = (value: any, fallback: number = 0): number => {
   return Number(value);
 };
 
-// PDF generation function
+// PDF Generation Utility
+/**
+ * Generates a proposal PDF as a Blob using @react-pdf/renderer.
+ * This renders the ProposalDocument React component tree to a PDF.
+ *
+ * @param calculation - Partial solar calculation data
+ * @param lead - Lead information
+ * @param financingData - Financing details (strongly typed)
+ * @returns Promise<Blob> - The generated PDF as a Blob
+ */
 export const generateProposal = async (
   calculation: Partial<SolarCalculation>,
   lead: Lead,
@@ -660,6 +687,9 @@ const ExecutiveSummaryPage: React.FC = () => (
   </Page>
 );
 
+/**
+ * System details page for the PDF.
+ */
 const SystemDetailsPage: React.FC<{
   calculation: Partial<SolarCalculation>;
   financingData: FinancingData;

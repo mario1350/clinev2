@@ -8,6 +8,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { calculatePayments, generateFinancingComparison } from '../../../utils/financing';
 import { useLeadStore } from '../../../stores/leadStore';
 import { generateProposal } from '../utils/ProposalGenerator';
+import { slugify } from '../../../utils/slugify';
 
 interface FinancingStepProps {
   calculation: Partial<SolarCalculation>;
@@ -25,7 +26,7 @@ interface FinancialComparison {
 
 type CreditScoreRange = 'low' | 'mid' | 'high';
 type LoanTerm = 10 | 15 | 20 | 25;
-type IncentiveType = 'cashback' | 'principal' | '';
+type IncentiveType = 'cashback' | 'principal' | 'other' | undefined;
 
 const LUMA_RATES = {
   2024: 0.26038,
@@ -53,20 +54,7 @@ const CREDIT_SCORE_RANGES = {
   high: { min: 700, max: 850, label: '700+ (High FICO)' }
 };
 
-interface FinancingData {
-  loanTerm: LoanTerm;
-  creditScoreRange: CreditScoreRange | '';
-  incentiveType: IncentiveType;
-  apr: number;
-  principal: number;
-  reducedPrincipal: number;
-  monthly: number;
-  reducedMonthly: number;
-  totalInterest: number;
-  reducedTotalInterest: number;
-  total: number;
-  reducedTotal: number;
-}
+import type { FinancingData } from '../utils/ProposalGenerator';
 
 // Incentive amount constant
 const INCENTIVE_AMOUNT = 6000;
@@ -107,7 +95,7 @@ const FinancingStep: React.FC<FinancingStepProps> = ({ calculation, onUpdate }) 
   const [financingData, setFinancingData] = useState<FinancingData>({
     loanTerm: 15,
     creditScoreRange: '',
-    incentiveType: '',
+    incentiveType: undefined,
     apr: 0,
     principal: 0,
     reducedPrincipal: 0,
@@ -191,7 +179,8 @@ const FinancingStep: React.FC<FinancingStepProps> = ({ calculation, onUpdate }) 
       const url = URL.createObjectURL(pdfBlob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `Solar_Proposal_${lead.name.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+      // Use slugify for safe filenames
+      link.download = `Solar_Proposal_${slugify(lead.name)}_${new Date().toISOString().split('T')[0]}.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -325,7 +314,7 @@ const FinancingStep: React.FC<FinancingStepProps> = ({ calculation, onUpdate }) 
       loanTerm: term,
       // Reset credit score range when term changes
       creditScoreRange: '',
-      incentiveType: '',
+      incentiveType: undefined,
       apr: 0
     }));
     setIsSubmitted(false);
@@ -334,7 +323,7 @@ const FinancingStep: React.FC<FinancingStepProps> = ({ calculation, onUpdate }) 
   };
 
   const handleCreditScoreSelect = (range: CreditScoreRange) => {
-    const apr = INTEREST_RATES[financingData.loanTerm][range];
+    const apr = INTEREST_RATES[financingData.loanTerm as LoanTerm][range];
     
     setFinancingData(prev => ({
       ...prev,
@@ -468,7 +457,7 @@ const FinancingStep: React.FC<FinancingStepProps> = ({ calculation, onUpdate }) 
                 </div>
                 <p className="text-sm text-gray-600 mt-2">
                   {financingData.loanTerm && (
-                    <>Rate: {INTEREST_RATES[financingData.loanTerm][range]}%</>
+                    <>Rate: {INTEREST_RATES[financingData.loanTerm as LoanTerm][range]}%</>
                   )}
                 </p>
               </button>
@@ -1023,7 +1012,8 @@ const FinancingStep: React.FC<FinancingStepProps> = ({ calculation, onUpdate }) 
                   const url = URL.createObjectURL(pdfBlob);
                   const link = document.createElement('a');
                   link.href = url;
-                  link.download = `Solar_Proposal_${lead.name.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+                  // Use slugify for safe filenames
+                  link.download = `Solar_Proposal_${slugify(lead.name)}_${new Date().toISOString().split('T')[0]}.pdf`;
                   document.body.appendChild(link);
                   link.click();
                   document.body.removeChild(link);
