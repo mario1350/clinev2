@@ -76,12 +76,14 @@ const calculateLumaProjection = (consumptionKWh: number) => {
 
 // Price table for solar panel configurations
 const panelPriceTable: Record<number, number> = {
-  8: 21999,
-  9: 22999,
-  10: 23999,
-  11: 24999,
-  12: 25999,
-  16: 29999
+  6: 21599,
+  8: 23999,
+  10: 25999,
+  12: 27999,
+  14: 30499,
+  16: 32499,
+  18: 35499,
+  20: 37999
 };
 
 const getBatteryConfig = (panelCount: number) => {
